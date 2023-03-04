@@ -1,9 +1,13 @@
 package com.example.webapp.repository;
-import com.example.webapp.model.Status;
+
+import org.bson.types.ObjectId;
+
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
+
+import com.example.webapp.model.SpecsCH;
 @Repository
-public interface StatusRepository extends MongoRepository<Status, String>{
+public interface SpecsRepositoryCH extends MongoRepository<SpecsCH,ObjectId>{
 
 }
