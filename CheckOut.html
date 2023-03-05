@@ -18,6 +18,8 @@
     <link rel="manifest" href="/../assets/images/icons/site.html">
     <link rel="mask-icon" href="/../assets/images/icons/safari-pinned-tab.svg" color="#666666">
     <link rel="shortcut icon" href="/../assets/images/icons/favicon.ico">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin=""/>
+
     <meta name="apple-mobile-web-app-title" content="Molla">
     <meta name="application-name" content="Molla">
     <meta name="msapplication-TileColor" content="#cc9966">
@@ -69,7 +71,16 @@
 
 
 
-
+  <div class="alert alert-success alert-dismissible fade show" role="alert"
+                             th:if="${message}" role="alert">
+                            <span th:text="${message}"></span>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        
+                        
+                        
 
         <main class="main">
         	<div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
@@ -90,13 +101,13 @@
             <div class="page-content">
             	<div class="checkout">
 	                <div class="container">
-            			<div class="checkout-discount">
+            		<!-- 	<div class="checkout-discount">
             				<form action="#">
         						<input type="text" class="form-control" required id="checkout-discount-input">
             					<label for="checkout-discount-input" class="text-truncate">Have a coupon? <span>Click here to enter your code</span></label>
             				</form>
             			</div><!-- End .checkout-discount -->
-            			
+            			 -->
             			<form action="#" th:action="@{/order/submit/{id}(id=${order._id})}" th:object="${order}" method="post">
 		                	<div class="row">
 		                		<div class="col-lg-9">
@@ -107,9 +118,9 @@
 		                						
 		                					</div><!-- End .col-sm-6 -->
 		                					<div class="col-sm-6">
-		                						<label>First Name *</label>
+		                					<!-- 	<label>First Name *</label> -->
 		                					<!--  <input id="firstName" th:field="*{firstName}" type="text" class="form-control" required>-->	
-		                					</div><!-- End .col-sm-6 -->
+		                				<!--	</div> End .col-sm-6 -->
 
 		                					<!--  <div class="col-sm-6">
 		                						<label>Last Name *</label>
@@ -127,7 +138,9 @@
 	            					<!-- 	<input id="address2" th:field="*{address2}"type="text" class="form-control" placeholder="Appartments, suite, unit etc ..." required> -->
 
 
-
+                                        <div id="map"></div>
+                                      <!--    <button id="save-location-btn">Save Location</button-->
+                                      <Button  type="button" id="save-order-btn">Save Location</Button>
 
 		                				<!-- <div class="col-sm-6">
 		                						<label>Phone *</label>
@@ -159,7 +172,6 @@
 		                						<!--  	<td th:text="${product.product_price}"></td>-->
 		                						<td th:text="${product.product_name}"></td>
 		                						<td th:text="${product.product_price}"> </td>
-		                						
 		                						
 		                						</tr>
                                              <!--  <tr><td>Order's Total Nbre of products</td><td th:text="${ListOfProducts.size()}}"></td></tr>
@@ -554,8 +566,76 @@
     <script src="/../assets/js/jquery.waypoints.min.js"></script>
     <script src="/../assets/js/superfish.min.js"></script>
     <script src="/../assets/js/owl.carousel.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
     <!-- Main JS File -->
     <script src="/../assets/js/main.js"></script>
+    
+    <script  type="text/javascript" th:inline="javascript">
+        
+     // request user's location
+        navigator.geolocation.getCurrentPosition(function(location) {
+            var lat = location.coords.latitude;
+            var lng = location.coords.longitude;
+
+            // set the map's view to the user's current location
+            //map.setView([lat, lng], 13);
+            var map = L.map('map').setView([lat, lng], 13);
+            // this section is required for copyright reasons
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
+            
+            
+            // this part set the longitude and latitude to the marker
+            var marker = L.marker([lat, lng]).addTo(map);
+            marker.bindPopup("I am a marker!").openPopup();
+            map.on('click', function(e) {
+                marker.setLatLng(e.latlng);
+                marker.bindPopup("You clicked at " + e.latlng.toString()).openPopup();
+            });
+            
+            
+            var saveLocationBtn = document.getElementById('save-order-btn');
+            
+            
+            saveLocationBtn.addEventListener('click',SaveLocation);
+            
+            
+            function SaveLocation(){
+                var lat = marker.getLatLng().lat;
+                var lng = marker.getLatLng().lng;             
+                // Use Fetch API or an AJAX library to send a request to your server to save the location to MongoDB
+                // Example using Fetch API:
+               var ids = /*[[${order._id.toString()}]]*/;
+                fetch('/save-order', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        lat: lat,
+                        lng: lng,
+                        id: ids
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+           
+          }
+          
+  });
+        </script>
+    
+    
+    
+    
+    
 </body>
 
 
