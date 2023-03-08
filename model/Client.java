@@ -13,7 +13,7 @@ package com.example.webapp.model;
 	    private String client_phone_number;
 	    private String client_address;
 	    private String client_region;
-	    
+	    private String client_password;
 	    
 		public String getClient_email() {
 			return client_email;

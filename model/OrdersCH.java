@@ -1,5 +1,6 @@
 package com.example.webapp.model;
 
+
 import java.util.List;
 import java.util.Map;
 
@@ -19,12 +20,16 @@ public class OrdersCH {
     private String orders_address;
     private String orders_delivereddate;
     private String orders_reason;
+    private Double orders_longitude;
+    private Double orders_latitude;
     //This should be a foreign key
     private String region_code;
     
     //Foreign Keys
     private String status_code;
     private String client;
+   
+	private String clientName;
 	private String employee;
 	private List<org.bson.Document> products;
 	
@@ -71,7 +76,12 @@ public class OrdersCH {
 		this.region_code = region_code;
 	}
 	
-
+	 public String getClientName() {
+			return clientName;
+		}
+		public void setClientName(String clientName) {
+			this.clientName = clientName;
+		}
 	
 	public String getEmployee() {
 		return employee;
@@ -98,15 +108,30 @@ public class OrdersCH {
 	public void setClient(String client) {
 		this.client = client;
 	}
+	
+	
+	public Double getOrders_longitude() {
+		return orders_longitude;
+	}
+	public void setOrders_longitude(Double orders_longitude) {
+		this.orders_longitude = orders_longitude;
+	}
+	public Double getOrders_latitude() {
+		return orders_latitude;
+	}
+	public void setOrders_latitude(Double orders_latitude) {
+		this.orders_latitude = orders_latitude;
+	}
 	public OrdersCH() {}
 	@Override
 	public String toString() {
-		return "Orders [orders=" + _id + ", orders_createdon=" + orders_createdon + ", orders_amount="
-				+ orders_amount + ", orders_address=" + orders_address + ", orders_delivereddate="
-				+ orders_delivereddate + ", orders_reason=" + orders_reason + ", region_code=" + region_code
-				+ ", status_code=" + status_code + ", client=" + client + ", employee=" + employee + ", products="
-				+ products + "]";
+		return "Orders [_id=" + _id + ", orders_createdon=" + orders_createdon + ", orders_amount=" + orders_amount
+				+ ", orders_address=" + orders_address + ", orders_delivereddate=" + orders_delivereddate
+				+ ", orders_reason=" + orders_reason + ", orders_longitude=" + orders_longitude + ", orders_latitude="
+				+ orders_latitude + ", region_code=" + region_code + ", status_code=" + status_code + ", client="
+				+ client + ", employee=" + employee + ", products=" + products + "]";
 	}
-	
-	
+
+
+
 }

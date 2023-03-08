@@ -78,29 +78,105 @@
                 <div class="container">
                     <div class="header-left">
                         <button class="mobile-menu-toggler">
+            <button class="mobile-menu-toggler">
                             <span class="sr-only">Toggle mobile menu</span>
                             <i class="icon-bars"></i>
                         </button>
 
-                        <a href="index.html" class="logo">
-                            <img src="../assets/images/Crazy Phone logo without Background.png" alt="Crazy Phone" width="105" height="25">
+                        <a th:href="@{/specs}" class="logo">
+                            <img src="https://drive.google.com/uc?id=110rPVZCN94_-HHzH0Zt1coTNPWIA8FyI" alt="Crazy Phone" width="105" height="25">
                         </a>
-
+                    
+                    
+                      
+                    
+                    
+                    
+                    
                         <nav class="main-nav">
                             <ul class="menu sf-arrows">
          
-                               <li>
-                                 <a th:href="@{/order/update/{id}(id=${order._id})}" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
-                                </li>    
+                                <span th:each="type :${types}">
+                                <li>
+                                   <a  class="logo" th:text="${type.type_name}" th:href="@{/loadCategories2/{type_name}(type_name=${type.type_name})}">
+                                  </a>
+                                </li>
+                               </span>
                             </ul><!-- End .menu -->
                         </nav><!-- End .main-nav -->
                     </div><!-- End .header-left -->
 
+                   <div class="header-right">    
+                  <!-- Checkout Button -->
+                   <a th:href="@{/order/update/{id}(id=${order._id})}" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
+                  <!-- End of checkout Button -->
+                  
+                  
+                  
+                  <!-- BEGINING OF CART -->
+                  
+                 <!--  <div  th:if="${ListOfSpecs != null and !ListOfSpecs.isEmpty()}" class="dropdown cart-dropdown show"> --> 
+                 <div   class="dropdown cart-dropdown">
+                   <!--   <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static"> -->
+                            <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                                <i class="icon-shopping-cart"></i>
+                                <span class="cart-count" th:text="${ListOfSpecs.size()}"></span>
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <div class="dropdown-cart-products"  >
+                                    <div class="product" th:each="specss : ${ListOfSpecs}">
+                                        <div class="product-cart-details">
+                                            <h4 class="product-title">
+                                                <a href="product.html" th:text="${specss.specs_model}" ></a>
+                                            </h4>
+
+                                            <span class="cart-product-info" th:text="${specss.specs_price}+'$'">
+                                             <!--   <span class="cart-product-qty">1</span> --> 
+                                               
+                                            </span>
+                                        </div><!-- End .product-cart-details -->
+
+                                        <figure class="product-image-container">
+                                            <a href="product.html" class="product-image">
+                                                <img th:src="@{'https://drive.google.com/uc?id=' + ${specss.specs_image}}" alt="product">
+                                            </a>
+                                        </figure>
+                                      <!--  <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a> --> 
+                                    </div><!-- End .product -->
+                                </div><!-- End .cart-product -->
+
+                                <div class="dropdown-cart-total">
+                                    <span>Total</span>
+
+                                    <span class="cart-total-price" th:text="${order.orders_amount}+'$'"></span>
+                                </div><!-- End .dropdown-cart-total -->
+
+                                <div class="dropdown-cart-action">
+                                  <!--    <a href="cart.html" class="btn btn-primary">View Cart</a>-->
+                                    <a href="checkout.html" class="btn btn-outline-primary-2" th:href="@{/order/update/{id}(id=${order._id})}"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
+                                </div><!-- End .dropdown-cart-total -->
+                            </div><!-- End .dropdown-menu -->
+                            
+                            
+                        </div>
+                   <!-- END OF DROPDOWN CART -->
                    
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   </div><!-- End .header-right -->
  
-                    </div><!-- End .header-right -->
+                    </div>
                 </div><!-- End .container -->
             </div><!-- End .header-middle -->
+            
+            
+            
         </header><!-- End .header -->
 
   <!------------------------------------ END OF HEADER -------------------------------------------------------->
@@ -115,7 +191,48 @@
 
 
 
+
+
+
+
+
+  <!------------------------------------ START FLASH MESSAGE -------------------------------------------------------->
+
+  <div class="alert alert-success alert-dismissible fade show" role="alert"
+                             th:if="${message}">
+                            <span th:text="${message}"></span>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+
+
+  <!------------------------------------ END FLASH MESSAGE -------------------------------------------------------->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   <!------------------------------------ PRODUCT LISTING -------------------------------------------------------->
+
       <main class="main">
             <div class="page-content">
 
@@ -181,8 +298,8 @@
                    </div>
                 </div>  
               </div>  <!--End page-content -->
-           </main>   <!-- End Of Main  -->   
-      
+            
+      </div>
       <!------------------------------------ END OF PRODUCT LISTING --------------------------------------------------------> 
       
       
@@ -193,7 +310,72 @@
       
       
       
+       <!--                                    PRODUCT BY CATEGORY                                               -->
       
+            <div class="container">
+                <div class="heading heading-center mb-3">
+                    <h2 class="title">Product Categories</h2><!-- End .title -->
+
+                    <ul class="nav nav-pills nav-border-anim justify-content-center" role="tablist" >
+                        <li class="nav-item" th:each="Type : ${types}"  th:id="'top-'+${Type.type_name}+'-item'">
+                        <!--    <a class="nav-link" th:id="'top-'+${Type.type_name}+'-link'" th:text="${Type.type_name}" data-toggle="tab" th:href="@{/loadCategories/{type_name}(type_name=${Type.type_name})}" role="tab" aria-controls="'top-'+${Type.type_name}+'-link'" aria-selected="false" th:data-category="${Type.type_name}"></a> -->
+                          <a class="nav-link" th:id="'top-'+${Type.type_name}+'-link'" th:text="${Type.type_name}"  th:href="@{/loadCategories0/{type_name}(type_name=${Type.type_name})}" aria-selected="false"></a>
+                        </li>
+
+                    </ul>
+                </div><!-- End .heading -->
+
+                
+
+                   <!--                                 END OF TAB                                       -->
+
+
+
+
+<div class="tab-content">
+                 
+                <!--                                 START OF TAB                                       -->
+               <!--    <div class="tab-pane p-0 fade active show" th:each="Type : ${types}" id="'top-'+${Type.type_name}+'-link'" aria-labelledby="'top-'+${Type.type_name}+'-link'"> -->  
+                    
+                     <div class="tab-pane p-0 fade active show" >               
+                       <div class="products">
+                              <div class="row justify-content-center"> 
+                            
+                            <!-- BEGINING OF PRODUCT ITEM--> 
+                                <div class="col-6 col-md-4 col-lg-3 col-xl-5col" th:each="specFiltered : ${specsFiltered}">
+                                    <div class="product product-11 text-center">
+                                        <figure class="product-media">
+                                            <a href="product.html">
+                                                <img th:src="@{'https://drive.google.com/uc?id=' + ${specFiltered.specs_image}}" alt="Product image" class="product-image">
+                                           <!--     <img src="assets/images/demos/demo-2/products/product-7-2.jpg" alt="Product image" class="product-image-hover"> --> 
+                                            </a>
+
+
+                                        </figure><!-- End .product-media -->
+
+                                        <div class="product-body">
+                                            <div class="product-cat">
+                                                <a href="#" th:text=${specFiltered.specs_type}></a>
+                                            </div><!-- End .product-cat -->
+                                            <h3 class="product-title"><a th:href="${specFiltered.specs_url}" th:text=${specFiltered.specs_model}></a></h3><!-- End .product-title -->
+                                            <div class="product-price" th:text="${specFiltered.specs_price}+'$'">
+                                               
+                                            </div><!-- End .product-price -->
+                                        </div><!-- End .product-body -->
+                                        <div class="product-action">
+                                            <a th:href="@{/specs/addToCartEmpty/{id}(id=${specFiltered._id})}" class="btn-product btn-cart"><span>add to cart</span></a>
+                                        </div><!-- End .product-action -->
+                                    </div><!-- End .product -->
+                                </div><!-- End .col-sm-6 col-md-4 col-lg-3 -->
+                                   <!-- END OF PRODUCT ITEM--> 
+                                   
+          
+                                           </div>
+                            </div><!-- End .row -->
+                        </div><!-- End .products -->
+                    </div><!-- .End .tab-pane -->
+      <!--------------------------------------END	 PRODUCTS BY CATEGORY -------------------------------------------------------->
+ </main>   <!-- End Of Main  -->       
       
       
       
@@ -217,7 +399,7 @@
 	            	<div class="row">
 	            		<div class="col-sm-6 col-lg-3">
 	            			<div class="widget widget-about">
-	            				<img src="../assets/images/Crazy Phone logo without Background.png" class="footer-logo" alt="Footer Logo" width="105" height="25">
+	            				<img src="http://localhost:8080/assets/images/Crazy%20Phone%20Logo.jpg" class="footer-logo" alt="Footer Logo" width="105" height="25">
 	            				<p> </p>
 
 	            				<div class="social-icons">
@@ -235,8 +417,8 @@
 	            				<h4 class="widget-title">Useful Links</h4><!-- End .widget-title -->
 
 	            				<ul class="widget-list">
-	            					<li><a href="about.html">About Crazy Phone</a></li>
-	            					<li><a href="#">How to shop on Crazy Phone</a></li>
+	            					<li><a href="about.html">About Molla</a></li>
+	            					<li><a href="#">How to shop on Molla</a></li>
 	            					<li><a href="#">FAQ</a></li>
 	            					<li><a href="contact.html">Contact us</a></li>
 	            					<li><a href="login.html">Log in</a></li>
@@ -286,7 +468,7 @@
 	        </div><!-- End .footer-bottom -->
         </footer><!-- End .footer -->
    
-      
+      </div>
       
       <!------------------------------------END OF FOOTER -------------------------------------------------------->  
       
@@ -307,6 +489,77 @@
       
       
       
+      
+            
+      
+     <script type="text/javascript" th:inline="javascript">
+     /*
+     var category;
+     console.log("Entered AJAX");
+     $(document).on('click', '.nav-link', function(event) {
+    	    event.preventDefault();
+    	    var tabId = $(this).attr('href');
+    	    var category = $(this).data('category');
+    	    console.log("category in ajax"+ category);
+    	    $.ajax({
+    	        url: '/loadCategories0/' + category,
+    	        type: 'GET',
+    	        cache: false,
+    	        success: function(data) {
+    	            $("html").html(data);
+    	            $(".nav-link").removeClass().addClass("nav-link");
+    	            $(this).removeClass().addClass("nav-link active");
+    	        },
+    	        error: function(xhr, status, error) {
+    	            console.log('Error:', error);
+    	        }
+    	    });
+    	});
+
+    
+     $(document).on('click', '.nav-link active', function(event) {
+  	  event.preventDefault();
+  	  var tabId = $(this).attr('href');
+  	  category = $(this).data('category');
+  	  console.log("category in ajax"+ category);
+  	  $.ajax({
+  	    url: '/loadCategories/' + category ,
+  	    type: 'GET',
+  	    cache: false,
+  	    success: function(data) {
+  	    /*console.log("data in ajax"+ data);
+  	     //$(tabId).html(data);
+  	    $('#col-6 col-md-4 col-lg-3 col-xl-5col').replaceWith(data);
+  	    */
+  	  /*
+  	    	  $("html").html(data);
+  	    },
+  	    error:function(xhr,status,error){
+  	    	 console.log('Error:', error);
+  	    }
+  	  });
+  	});
+  
+     
+     $('btn-close').on('click',function(){
+    	 $(this).closest('.alert alert-success').hide();
+     })
+     
+     
+     
+     
+     $(document).ready(function() {
+    $('.cart-dropdown a.dropdown-toggle').on('click', function() {
+        $('.cart-dropdown').toggleClass('show');
+    });
+});
+     /*
+     var specFiltered = [];
+     $.get("/loadCategories/"+ category, function(data) {
+    	 specsFiltered = data;
+     });
+     */
+     </script> 
       
       
       

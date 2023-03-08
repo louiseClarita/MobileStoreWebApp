@@ -23,25 +23,25 @@
     <meta name="description" content="CrazyPhone">
     <meta name="author" content="p-themes">
     <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/icons/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/icons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/icons/favicon-16x16.png">
-    <link rel="manifest" href="assets/images/icons/site.html">
-    <link rel="mask-icon" href="assets/images/icons/safari-pinned-tab.svg" color="#666666">
-    <link rel="shortcut icon" href="assets/images/icons/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/icons/favicon-16x16.png">
+    <link rel="manifest" href="../assets/images/icons/site.html">
+    <link rel="mask-icon" href="../assets/images/icons/safari-pinned-tab.svg" color="#666666">
+    <link rel="shortcut icon" href="../assets/images/icons/favicon.ico">
     <meta name="apple-mobile-web-app-title" content="Molla">
     <meta name="application-name" content="Molla">
     <meta name="msapplication-TileColor" content="#cc9966">
-    <meta name="msapplication-config" content="assets/images/icons/browserconfig.xml">
+    <meta name="msapplication-config" content="../assets/images/icons/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
-    <link rel="stylesheet" type="text/css" href="/assets/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="/assets/css/plugins/owl-carousel/owl.carousel.css">
-    <link rel="stylesheet" type="text/css" href="/assets/css/plugins/magnific-popup/magnific-popup.css">
+    <link rel="stylesheet" type="text/css" href="../assets/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../assets/css/plugins/owl-carousel/owl.carousel.css">
+    <link rel="stylesheet" type="text/css" href="../assets/css/plugins/magnific-popup/magnific-popup.css">
     <!-- Main CSS File -->
-    <link rel="stylesheet"type="text/css"  href="/assets/css/style.css">
-    <link rel="stylesheet"  type="text/css" href="/assets/css/plugins/nouislider/nouislider.css">
+    <link rel="stylesheet"type="text/css"  href="../assets/css/style.css">
+    <link rel="stylesheet"  type="text/css" href="../assets/css/plugins/nouislider/nouislider.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </head>
   <!------------------------------------ LAST HEADER -------------------------------------------------------->
 <body>
@@ -94,20 +94,89 @@
                     
                         <nav class="main-nav">
                             <ul class="menu sf-arrows">
-                       <li th:each="type :${types}">
-                        <a  class="logo" th:text="${type.type_name}" th:href="@{/loadCategories2/{type_name}(type_name=${type.type_name})}">
-                           </a>
-                    </li>
-                                
+         
+                                <span th:each="type :${types}">
+                                <li>
+                                   <a  class="logo" th:text="${type.type_name}" th:href="@{/loadCategories2/{type_name}(type_name=${type.type_name})}">
+                                  </a>
+                                </li>
+                               </span>
                             </ul><!-- End .menu -->
                         </nav><!-- End .main-nav -->
-                        
-                           </div><!-- End .header-left -->
+                    </div><!-- End .header-left -->
 
+                   <div class="header-right">    
+                  <!-- Checkout Button -->
+                  <div th:if(order._id!=null)>
+                   <a th:href="@{/order/update/{id}(id=${order._id})}" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
+                  <!-- End of checkout Button -->
+                  </div>
                   
-                    </div><!-- End .header-right -->
+                  
+                  <!-- BEGINING OF CART -->
+                  
+                 <!--  <div  th:if="${ListOfSpecs != null and !ListOfSpecs.isEmpty()}" class="dropdown cart-dropdown show"> --> 
+                 <div   class="dropdown cart-dropdown">
+                   <!--   <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static"> -->
+                            <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+                                <i class="icon-shopping-cart"></i>
+                                <span class="cart-count" th:text="${ListOfSpecs.size()}"></span>
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <div class="dropdown-cart-products"  >
+                                    <div class="product" th:each="specss : ${ListOfSpecs}">
+                                        <div class="product-cart-details">
+                                            <h4 class="product-title">
+                                                <a href="product.html" th:text="${specss.specs_model}" ></a>
+                                            </h4>
+
+                                            <span class="cart-product-info" th:text="${specss.specs_price}+'$'">
+                                             <!--   <span class="cart-product-qty">1</span> --> 
+                                               
+                                            </span>
+                                        </div><!-- End .product-cart-details -->
+
+                                        <figure class="product-image-container">
+                                            <a href="product.html" class="product-image">
+                                                <img th:src="@{'https://drive.google.com/uc?id=' + ${specss.specs_image}}" alt="product">
+                                            </a>
+                                        </figure>
+                                      <!--  <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a> --> 
+                                    </div><!-- End .product -->
+                                </div><!-- End .cart-product -->
+
+                                <div class="dropdown-cart-total">
+                                    <span>Total</span>
+
+                                    <span class="cart-total-price" th:text="${order.orders_amount}+'$'"></span>
+                                </div><!-- End .dropdown-cart-total -->
+
+                                <div class="dropdown-cart-action">
+                                  <!--    <a href="cart.html" class="btn btn-primary">View Cart</a>-->
+                                    <a href="checkout.html" class="btn btn-outline-primary-2" th:href="@{/order/update/{id}(id=${order._id})}"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
+                                </div><!-- End .dropdown-cart-total -->
+                            </div><!-- End .dropdown-menu -->
+                            
+                            
+                        </div>
+                   <!-- END OF DROPDOWN CART -->
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   
+                   </div><!-- End .header-right -->
+ 
+                    </div>
                 </div><!-- End .container -->
             </div><!-- End .header-middle -->
+            
+            
+            
         </header><!-- End .header -->
 
   <!------------------------------------ END OF HEADER -------------------------------------------------------->
@@ -122,16 +191,55 @@
 
 
 
+
+
+
+
+
+  <!------------------------------------ START FLASH MESSAGE -------------------------------------------------------->
+
+  <div class="alert alert-success alert-dismissible fade show" role="alert"
+                             th:if="${message}">
+                            <span th:text="${message}"></span>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+
+
+  <!------------------------------------ END FLASH MESSAGE -------------------------------------------------------->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   <!------------------------------------ PRODUCT LISTING -------------------------------------------------------->
+
       <main class="main">
-           <!--  <div class="page-content"> -->
+            <div class="page-content">
 
 
 <div class="container" th:switch="${specs}">
-                    <h2 class="title text-center mb-4">All Products</h2><!-- End .title text-center --> 
-                   <!--  -->
-                                      <!--  owl-cowl-carousel owl-simple carousel-equal-height carousel-with-shadow owl-loaded owl-dragarousel owl-simple carousel-equal-height carousel-with-shadow-->
-                    <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow owl-loaded owl-drag" data-toggle="owl" 
+                    <h2 class="title text-center mb-4">Available Products</h2><!-- End .title text-center -->
+                    <div class="owl-carousel owl-simple carousel-equal-height carousel-with-shadow" data-toggle="owl" 
                         data-owl-options='{
                             "nav": false, 
                             "dots": true,
@@ -166,23 +274,19 @@
 
                    
                                 <div class="product-action">
-                                    <a href="#" class="btn-product btn-cart" th:href="@{/specs/addToCartEmpty/{id}(id=${spec._id})}"><span>add to cart</span></a>
+                                    <a href="#" class="btn-product btn-cart" th:href="@{/specs/addToCart/{id}/{id2}(id=${spec._id},id2=${order._id})}"><span>add to cart</span></a>
                                 </div><!-- End .product-action -->
                             </figure><!-- End .product-media -->
 
                             <div class="product-body">
                                 <div class="product-cat">
-                                    <a th:text="${spec.specs_type}" href="#"></a>
+                                    <a th></a>
                                 </div><!-- End .product-cat -->
                                 <h3 class="product-title"><a href="product.html" th:text="${spec.specs_model}"><br></a></h3><!-- End .product-title -->
                                <div class="product-price" th:text="${spec.specs_storage}"></div>
                               <div class="product-price" th:text="${spec.specs_color}"></div>
-                                
-                               <div class="product-price" th:text="${spec.specs_price}+'$'">
-                              
-                                </div><!-- End .product-price -->
-                              
-          <!--
+                             <div class="product-price" th:text="${spec.specs_price}+'$'">
+          <!--<div class="product-price" th:text="${spec.specs_price}">
                                 <div class="product-nav product-nav-dots">
                                     <a href="#" class="active" style="background: #cc9966;"><span class="sr-only">Color name</span></a>
                                     <a href="#" style="background: #7fc5ed;"><span class="sr-only" th:text="${spec.specs_color}"></span></a>
@@ -193,44 +297,27 @@
 
                    </div>
                 </div>  
-            <!--End page-content -->
+              </div>  <!--End page-content -->
             
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            <!------------------------------------ END OF PRODUCT LISTING --------------------------------------------------------> 
+      </div>
+      <!------------------------------------ END OF PRODUCT LISTING --------------------------------------------------------> 
       
-      <!--                                    PRODUCT BY CATEGORY                                               -->
       
-      <div class="container">
+      
+      
+      
+      
+      
+       <!--                                    PRODUCT BY CATEGORY                                               -->
+      
+            <div class="container">
                 <div class="heading heading-center mb-3">
                     <h2 class="title">Product Categories</h2><!-- End .title -->
 
                     <ul class="nav nav-pills nav-border-anim justify-content-center" role="tablist" >
                         <li class="nav-item" th:each="Type : ${types}"  th:id="'top-'+${Type.type_name}+'-item'">
                         <!--    <a class="nav-link" th:id="'top-'+${Type.type_name}+'-link'" th:text="${Type.type_name}" data-toggle="tab" th:href="@{/loadCategories/{type_name}(type_name=${Type.type_name})}" role="tab" aria-controls="'top-'+${Type.type_name}+'-link'" aria-selected="false" th:data-category="${Type.type_name}"></a> -->
+                    
                           <a class="nav-link" th:id="'top-'+${Type.type_name}+'-link'" th:text="${Type.type_name}"  th:href="@{/loadCategories/{type_name}(type_name=${Type.type_name})}" aria-selected="false"></a>
                         </li>
 
@@ -286,74 +373,10 @@
                             </div><!-- End .row -->
                         </div><!-- End .products -->
                     </div><!-- .End .tab-pane -->
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-
-
-
-
-
-
-
-
-                          <!--                                                                                     -->
-                   
-                    
-            </div>
-      
-      
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-           </main>   <!-- End Of Main  -->   
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
       <!--------------------------------------END	 PRODUCTS BY CATEGORY -------------------------------------------------------->
       
-      
-      
-      
-      	
-      
-      
+      <!--------------------------------------END	 PRODUCTS BY CATEGORY -------------------------------------------------------->
+ </main>   <!-- End Of Main  -->       
       
       
       
@@ -367,28 +390,6 @@
       
       
       
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-        <!--------------------------------------END  PRODUCTS BY CATEGORY -------------------------------------------------------->
       
       
       
@@ -399,7 +400,7 @@
 	            	<div class="row">
 	            		<div class="col-sm-6 col-lg-3">
 	            			<div class="widget widget-about">
-	            				<img src="assets/images/Crazy Phone Logo.jpg" class="footer-logo" alt="Footer Logo" width="105" height="25">
+	            				<img src="http://localhost:8080/assets/images/Crazy%20Phone%20Logo.jpg" class="footer-logo" alt="Footer Logo" width="105" height="25">
 	            				<p> </p>
 
 	            				<div class="social-icons">
@@ -476,11 +477,24 @@
       
       
       
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+            
+      
      <script type="text/javascript" th:inline="javascript">
-     
-   /*
-     
-     
+     /*
      var category;
      console.log("Entered AJAX");
      $(document).on('click', '.nav-link', function(event) {
@@ -489,13 +503,13 @@
     	    var category = $(this).data('category');
     	    console.log("category in ajax"+ category);
     	    $.ajax({
-    	        url: '/loadCategories/' + category,
+    	        url: '/loadCategories0/' + category,
     	        type: 'GET',
     	        cache: false,
     	        success: function(data) {
     	            $("html").html(data);
-    	          //  $(".nav-link").removeClass().addClass("nav-link");
-    	        //    $(this).removeClass().addClass("nav-link active");
+    	            $(".nav-link").removeClass().addClass("nav-link");
+    	            $(this).removeClass().addClass("nav-link active");
     	        },
     	        error: function(xhr, status, error) {
     	            console.log('Error:', error);
@@ -504,7 +518,7 @@
     	});
 
     
-    $('.nav-link active').click(function(event) {
+     $(document).on('click', '.nav-link active', function(event) {
   	  event.preventDefault();
   	  var tabId = $(this).attr('href');
   	  category = $(this).data('category');
@@ -517,8 +531,8 @@
   	    /*console.log("data in ajax"+ data);
   	     //$(tabId).html(data);
   	    $('#col-6 col-md-4 col-lg-3 col-xl-5col').replaceWith(data);
-  	    *//*
-  	  
+  	    */
+  	  /*
   	    	  $("html").html(data);
   	    },
   	    error:function(xhr,status,error){
@@ -527,7 +541,19 @@
   	  });
   	});
   
-
+     
+     $('btn-close').on('click',function(){
+    	 $(this).closest('.alert alert-success').hide();
+     })
+     
+     
+     
+     
+     $(document).ready(function() {
+    $('.cart-dropdown a.dropdown-toggle').on('click', function() {
+        $('.cart-dropdown').toggleClass('show');
+    });
+});
      /*
      var specFiltered = [];
      $.get("/loadCategories/"+ category, function(data) {
@@ -543,31 +569,19 @@
       
       
       
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
           <!-- Plugins JS File -->
-    <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/jquery.hoverIntent.min.js"></script>
-    <script src="assets/js/jquery.waypoints.min.js"></script>
-    <script src="assets/js/superfish.min.js"></script>
-    <script src="assets/js/owl.carousel.min.js"></script>
-    <script src="assets/js/bootstrap-input-spinner.js"></script>
-    <script src="assets/js/jquery.elevateZoom.min.js"></script>
-    <script src="assets/js/bootstrap-input-spinner.js"></script>
-    <script src="assets/js/jquery.magnific-popup.min.js"></script>
+    <script src="/../assets/js/jquery.min.js"></script>
+    <script src="/../assets/js/bootstrap.bundle.min.js"></script>
+    <script src="/../assets/js/jquery.hoverIntent.min.js"></script>
+    <script src="/../assets/js/jquery.waypoints.min.js"></script>
+    <script src="/../assets/js/superfish.min.js"></script>
+    <script src="/../assets/js/owl.carousel.min.js"></script>
+    <script src="/../assets/js/bootstrap-input-spinner.js"></script>
+    <script src="/../assets/js/jquery.elevateZoom.min.js"></script>
+    <script src="/../assets/js/bootstrap-input-spinner.js"></script>
+    <script src="/../assets/js/jquery.magnific-popup.min.js"></script>
     <!-- Main JS File -->
-    <script src="assets/js/main.js"></script>    
+    <script src="/../assets/js/main.js"></script>    
 </body>
 
 </html>

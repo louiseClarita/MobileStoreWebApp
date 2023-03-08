@@ -39,7 +39,7 @@
         <main class="main">
         	<div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
         		<div class="container">
-        			<h1 class="page-title">Orders</h1>
+        			<h1 class="page-title">Products</h1>
         		</div><!-- End .container -->
         	</div><!-- End .page-header -->
             <nav aria-label="breadcrumb" class="breadcrumb-nav">
@@ -47,7 +47,7 @@
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="index.html">Home</a></li>
                         <li class="breadcrumb-item"><a href="#">Shop</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Orders</li>
+                        <li class="breadcrumb-item active" aria-current="page">Products</li>
                     </ol>
                 </div><!-- End .container -->
             </nav><!-- End .breadcrumb-nav -->
@@ -57,31 +57,33 @@
 					<table class="table table-wishlist table-mobile">
 						<thead>
 							<tr>
-								<th>Address</th>
-								<th>Amount</th>
-								<th>Orders Status</th>
-								<th></th>
+								<th>Model Name</th>
+								<th>Price</th>
+								<th>Color</th>
+								
+								<th> <a th:href="@{'/productspecs/new'}" class="btn btn-block btn-outline-primary-2" role="button" >New Product</a>
+</th>
 								<th></th>
 							</tr>
 						</thead>
 
 						<tbody>
-							<tr th:each="order : ${orders}">
+							<tr th:each="spec : ${specs}">
 								<td class="product-col">
 									<div class="product">
-										<!--<figure class="product-media">
+										<figure class="product-media">
 											<a href="#">
-												<img src="assets/images/products/table/product-1.jpg" alt="Product image">
+												 <img th:src="@{'https://drive.google.com/uc?id=' + ${spec.specs_image}}" alt="Product image" class="product-image">
 											</a>
-										</figure>-->
+										</figure>
 
 										<h3 class="product-title">
-											<a href="#">[[${order.orders_address}]]</a>
+											 <a href="#">[[${spec.specs_model}]]</a> 
 										</h3><!-- End .product-title -->
 									</div><!-- End .product -->
 								</td>
-								<td class="price-col">[[${order.orders_amount}]]$</td>
-								<td class="stock-col"><span class="in-stock">[[${order.status_code}]]</span></td>
+								<td class="price-col">[[${spec.specs_price}]]$</td> 
+								 <td class="stock-col"><span class="in-stock">[[${spec.specs_color}]]</span></td> 
 								<td class="action-col">
                                     <div class="dropdown">
 									<button class="btn btn-block btn-outline-primary-2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -89,10 +91,10 @@
                                     </button>
 
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item" th:href="@{'/' + ${order.orders}}">Edit</a>
+                                        <a class="dropdown-item" th:href="@{'/productspecs/' + ${spec._id}}">Edit</a>
                                         
                                       <!--   <a class="dropdown-item" th:href="@{'/orders/' + ${order.orders}}">Edit</a>--> 
-                                        <a class="dropdown-item" th:href="@{'/orders/delete/' + ${order.orders}}"  id="btnDelete" title="Delete this order">Delete</a>
+                                        <a class="dropdown-item" th:href="@{'/productspecs/delete/' + ${spec._id}}"  id="btnDelete" title="Delete this order">Delete</a>
                                       </div>
                                     </div>
 								</td>
@@ -305,8 +307,14 @@
         </div><!-- End .mobile-menu-wrapper -->
     </div><!-- End .mobile-menu-container -->
 
+
+
+
+
+
+
     <!-- Sign in / Register Modal -->
-    <div class="modal fade" id="signin-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade" id="signin-modal" tabindex="-1" role="dialog" aria-hidden="true" >
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-body">
@@ -324,17 +332,39 @@
                                     <a class="nav-link" id="register-tab" data-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">Register</a>
                                 </li>
                             </ul>
+                            
+                            
+                            
+                            
+                            
+                            
+  <!------------------------------------ START FLASH MESSAGE -------------------------------------------------------->
+
+  <div class="alert alert-success alert-dismissible fade show" role="alert"
+                             th:if="${message}">
+                            <span th:text="${message}"></span>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+
+
+  <!------------------------------------ END FLASH MESSAGE -------------------------------------------------------->
+                            
+                            
+                            
                             <div class="tab-content" id="tab-content-5">
                                 <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
-                                    <form action="#">
+                                    <form th:action="@{/client/auth}" method="post" enctype="multipart/form-data" th:object="${emp}"  >
                                         <div class="form-group">
-                                            <label for="singin-email">Username or email address *</label>
-                                            <input type="text" class="form-control" id="singin-email" name="singin-email" required>
+                                            <label for="singin-email" >Username or email address *</label>
+                                            <input type="text" th:field="*{username}" class="form-control" id="singin-email" name="singin-email" required>
                                         </div><!-- End .form-group -->
 
                                         <div class="form-group">
                                             <label for="singin-password">Password *</label>
-                                            <input type="password" class="form-control" id="singin-password" name="singin-password" required>
+                                            <input type="password" th:field="*{emp_pass}" class="form-control" id="singin-password" name="singin-password" required>
                                         </div><!-- End .form-group -->
 
                                         <div class="form-footer">
@@ -343,7 +373,7 @@
                                                 <i class="icon-long-arrow-right"></i>
                                             </button>
 
-                                            <div class="custom-control custom-checkbox">
+                                           <div class="custom-control custom-checkbox">
                                                 <input type="checkbox" class="custom-control-input" id="signin-remember">
                                                 <label class="custom-control-label" for="signin-remember">Remember Me</label>
                                             </div><!-- End .custom-checkbox -->
@@ -351,7 +381,7 @@
                                             <a href="#" class="forgot-link">Forgot Your Password?</a>
                                         </div><!-- End .form-footer -->
                                     </form>
-                                    <div class="form-choice">
+                                 <!--   <div class="form-choice">
                                         <p class="text-center">or sign in with</p>
                                         <div class="row">
                                             <div class="col-sm-6">
@@ -360,15 +390,15 @@
                                                     Login With Google
                                                 </a>
                                             </div><!-- End .col-6 -->
-                                            <div class="col-sm-6">
+                                         <!--  -  <div class="col-sm-6">
                                                 <a href="#" class="btn btn-login btn-f">
                                                     <i class="icon-facebook-f"></i>
                                                     Login With Facebook
                                                 </a>
                                             </div><!-- End .col-6 -->
-                                        </div><!-- End .row -->
-                                    </div><!-- End .form-choice -->
-                                </div><!-- .End .tab-pane -->
+                                   <!--       </div><!-- End .row -->
+                               <!--        </div><!-- End .form-choice -->-->  
+                            <!--       </div><!-- .End .tab-pane -->
                                 <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
                                     <form action="#">
                                         <div class="form-group">

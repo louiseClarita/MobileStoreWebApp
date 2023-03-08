@@ -3,21 +3,23 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "test")
+@Document(collection = "Employee")
 public class Employee {
     @Id
-    private ObjectId id;
+    private ObjectId _id;
     private String fname;
     private String department;
     private double salary;
     private int age;
+    private String emp_pass;
+    private String username;
     
     public ObjectId getId() {
-        return id;
+        return _id;
     }
 
     public void setId(ObjectId id) {
-        this.id = id;
+        this._id = id;
     }
 
     public String getName() {
@@ -51,4 +53,45 @@ public class Employee {
     public void setAge(int age) {
         this.age = age;
     }
+
+	public ObjectId get_id() {
+		return _id;
+	}
+
+	public void set_id(ObjectId _id) {
+		this._id = _id;
+	}
+
+	public String getFname() {
+		return fname;
+	}
+
+	public void setFname(String fname) {
+		this.fname = fname;
+	}
+
+	public String getEmp_pass() {
+		return emp_pass;
+	}
+
+	public void setEmp_pass(String emp_pass) {
+		this.emp_pass = emp_pass;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	@Override
+	public String toString() {
+		return "Employee [_id=" + _id + ", fname=" + fname + ", department=" + department + ", salary=" + salary
+				+ ", age=" + age + ", emp_pass=" + emp_pass + ", username=" + username + "]";
+	}
+
+    
+    
 }
